@@ -16,8 +16,8 @@ Check out this resource called [Explain Shell](https://explainshell.com/explain?
 
 ### nmap Results
 You should see something similar to this output:
-![nmap scan 1](/images/scan01.png)
-![nmap scan 2](/images/scan02.png)
+![nmap scan 1](./images/scan01.png)
+![nmap scan 2](./images/scan02.png)
 
 
 
@@ -34,16 +34,16 @@ Using Samba's smbclient tool we can list what's available. Note that backslashes
 
 `smbclient -N -L \\\\10.10.10.27\\`
 
-![smb 1](/images/smb01.png)
+![smb 1](./images/smb01.png)
 
 Ooh, what is this backups share that's open to everyone? Backups should not typically be shared to the public, so let's hope there's something juicy in there.
 Point smbclient to that share. Then, use `dir` to list out the folder contents since this is a Windows machine. This command is similar to the `ls` command in Unix-land.
 
-![smb 2](/images/smb02.png)
+![smb 2](./images/smb02.png)
 
 The only file there is `prod.dtsConfig`. Nice. Someone backed up their SQL Server Integration Services configuration to a public share. Looking online we can see that it usually contains ["metadata such as the server name, database names, and other connection properties to configure SSIS packages"](https://fileinfo.com/extension/dtsconfig). Perfect. Use the `get` command to download it and lets inspect it.
 
-![config 1](/images/config01.png)
+![config 1](./images/config01.png)
 
 
 Cleartext credentials are a beautiful sight for us. We see `User ID=ARCHETYPE\sql_svc` and `Password=M3g4c0rp123`. Those are the credentials for the local sql_svc user on the ARCHETYPE machine. Let's see what we can do from here! 
